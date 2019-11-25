@@ -6,6 +6,7 @@ import { ViewState, EditingState } from '@devexpress/dx-react-scheduler';
 import {
   Scheduler,
   Toolbar,
+  DayView,
   MonthView,
   WeekView,
   ViewSwitcher,
@@ -14,7 +15,7 @@ import {
   AppointmentForm,
   DragDropProvider,
   EditRecurrenceMenu,
-  AllDayPanel,
+  AllDayPanel
 } from '@devexpress/dx-react-scheduler-material-ui';
 import { connectProps } from '@devexpress/dx-react-core';
 import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -238,6 +239,12 @@ class AppointmentFormContainerBasic extends React.PureComponent {
                 rows="6"
               />
             </div>
+            <div className={classes.wrapper}>
+              <Create className={classes.icon} color="action" />
+              <TextField
+                {...textEditorProps('custom')}
+              />
+            </div>
           </div>
           <div className={classes.buttonGroup}>
             {!isNewAppointment && (
@@ -288,13 +295,17 @@ const TextEditor = (props) => {
   } return <AppointmentForm.TextEditor {...props} />;
 };
 
+let today = new Date();
+let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+
 /* eslint-disable-next-line react/no-multi-comp */
-class Demo extends React.PureComponent {
+class Demo extends React.PureComponent {  
+
   constructor(props) {
     super(props);
     this.state = {
       data: appointments,
-      currentDate: '2018-06-27',
+      currentDate: date,
       confirmationVisible: false,
       editingFormVisible: false,
       deletedAppointmentId: undefined,
@@ -428,7 +439,7 @@ class Demo extends React.PureComponent {
           height={660}
         >
           <ViewState
-            currentDate={currentDate}
+            currentDate={currentDate}            
           />
           <EditingState
             onCommitChanges={this.commitChanges}
@@ -440,6 +451,10 @@ class Demo extends React.PureComponent {
             startDayHour={startDayHour}
             endDayHour={endDayHour}
           />
+          <DayView
+            startDayHour={9}
+            endDayHour={18}
+          />          
           <AllDayPanel />
           <EditRecurrenceMenu />
           <Appointments />
